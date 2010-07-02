@@ -16,20 +16,17 @@
 
 package android.jpsan.es;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.database.Cursor;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TaskEdit extends Activity {
@@ -64,11 +61,6 @@ public class TaskEdit extends Activity {
 		mTitleText = (EditText) findViewById(R.id.title);
 		mBodyText = (EditText) findViewById(R.id.body);
 		mDateDisplay = (TextView) findViewById(R.id.selectedDate);
-		
-		// mDate =
-		// Integer.parseInt(((EditText)findViewById(R.id.text2)).getText().toString());
-
-		// integerToDate();
 
 		Button confirmButton = (Button) findViewById(R.id.confirm);
 		Button cancelButton = (Button) findViewById(R.id.cancel);
