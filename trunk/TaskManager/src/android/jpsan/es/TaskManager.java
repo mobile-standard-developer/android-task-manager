@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -71,12 +70,10 @@ public class TaskManager extends ListActivity {
 		startManagingCursor(notesCursor);
 
 		// Create an array to specify the fields we want to display in the list
-		// (only TITLE)
 		String[] from = new String[] {NotesDbAdapter.KEY_TITLE,
 				NotesDbAdapter.KEY_DATE };
 
-		// and an array of the fields we want to bind those fields to (in this
-		// case just text1)
+		// and an array of the fields we want to bind those fields to
 		int[] to = new int[] {R.id.text1, R.id.text2 };
 
 		// Now create a simple cursor adapter and set it to display
@@ -139,7 +136,7 @@ public class TaskManager extends ListActivity {
 			fillData();
 			return true;
 		case UNDONE_ID:
-			// Code to ser de "X" icon
+			// Code to set the "X" icon
 			fillData();
 			return true;
 
@@ -152,11 +149,6 @@ public class TaskManager extends ListActivity {
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 	
-	private void getFromServer(){
-		Intent i = new Intent (this, TaskEdit.class);
-		startActivityForResult(i,ACTIVITY_EDIT);
-	}
-
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 

@@ -25,6 +25,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
+ * @Updated by Azevedo.
+ * 
  * Simple notes database access helper class. Defines the basic CRUD operations
  * for the notepad example, and gives the ability to list all notes as well as
  * retrieve or modify a specific note.
@@ -39,6 +41,9 @@ public class NotesDbAdapter {
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_BODY = "body";
 	public static final String KEY_ROWID = "_id";
+	// Storing 2 dates... One Int another String
+	// As we r working on a Android a single space isn't really a concern
+	
 	public static final String KEY_DATE_INTEGER = "date_i";
 	public static final String KEY_DATE = "date";
 
@@ -46,6 +51,7 @@ public class NotesDbAdapter {
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 
+	//Constants to query by order
 	public static final int BY_TITLE = 0;
 	public static final int BY_DATE = 1;
 	public static final int BY_ORDER = 2;
@@ -153,7 +159,7 @@ public class NotesDbAdapter {
 
 	/**
 	 * Return a Cursor over the list of all notes in the database
-	 * 
+	 * The caller must specify a order and a key provided by this class.
 	 * @return Cursor over all notes
 	 */
 	public Cursor fetchAllNotes(int key, int order) {

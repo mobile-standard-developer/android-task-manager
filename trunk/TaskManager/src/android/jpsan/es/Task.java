@@ -1,5 +1,10 @@
 package android.jpsan.es;
-
+/**
+ * Class modeling a TASK never really used,
+ * should be ready to the rest of the deploying, though.
+ * @author Azevedo
+ *
+ */
 public class Task {
 	private String title;
 	private String date;
