@@ -42,7 +42,7 @@ public class TaskManager extends ListActivity {
 	private static final int UNDONE_ID = Menu.FIRST + 3;
 	
 
-	private NotesDbAdapter mDbHelper;
+	private TasksDbAdapter mDbHelper;
 	
 	private int actualSortKey;
 	private int actualSortOrder;
@@ -53,10 +53,10 @@ public class TaskManager extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notes_list);
-		mDbHelper = new NotesDbAdapter(this);
+		mDbHelper = new TasksDbAdapter(this);
 		mDbHelper.open();
-		actualSortKey = NotesDbAdapter.BY_TITLE;
-		actualSortOrder = NotesDbAdapter.ASC_ORDER;
+		actualSortKey = TasksDbAdapter.BY_TITLE;
+		actualSortOrder = TasksDbAdapter.ASC_ORDER;
 		fillData();
 		registerForContextMenu(getListView());
 	}
@@ -70,8 +70,8 @@ public class TaskManager extends ListActivity {
 		startManagingCursor(notesCursor);
 
 		// Create an array to specify the fields we want to display in the list
-		String[] from = new String[] {NotesDbAdapter.KEY_TITLE,
-				NotesDbAdapter.KEY_DATE };
+		String[] from = new String[] {TasksDbAdapter.KEY_TITLE,
+				TasksDbAdapter.KEY_DATE };
 
 		// and an array of the fields we want to bind those fields to
 		int[] to = new int[] {R.id.text1, R.id.text2 };
@@ -99,13 +99,13 @@ public class TaskManager extends ListActivity {
 			createNote();
 			return true;
 		case SORT_TITLE_ID:
-			this.actualSortKey = NotesDbAdapter.BY_TITLE;
-			this.actualSortOrder = NotesDbAdapter.ASC_ORDER;
+			this.actualSortKey = TasksDbAdapter.BY_TITLE;
+			this.actualSortOrder = TasksDbAdapter.ASC_ORDER;
 			fillData();
 			return true;
 		case SORT_DATE_ID:
-			this.actualSortKey = NotesDbAdapter.BY_DATE;
-			this.actualSortOrder = NotesDbAdapter.DESC_ORDER;
+			this.actualSortKey = TasksDbAdapter.BY_DATE;
+			this.actualSortOrder = TasksDbAdapter.DESC_ORDER;
 			fillData();
 			return true;
 		}
@@ -154,7 +154,7 @@ public class TaskManager extends ListActivity {
 
 		super.onListItemClick(l, v, position, id);
 		Intent i = new Intent(this, TaskEdit.class);
-		i.putExtra(NotesDbAdapter.KEY_ROWID, id);
+		i.putExtra(TasksDbAdapter.KEY_ROWID, id);
 		startActivityForResult(i, ACTIVITY_EDIT);
 
 	}

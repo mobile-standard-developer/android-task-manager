@@ -46,14 +46,14 @@ public class TaskEdit extends Activity {
 	
 	
 
-	private NotesDbAdapter mDbHelper;
+	private TasksDbAdapter mDbHelper;
 
 	static final int DATE_DIALOG_ID = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mDbHelper = new NotesDbAdapter(this);
+		mDbHelper = new TasksDbAdapter(this);
 		
 		mDbHelper.open();
 		setContentView(R.layout.note_edit);
@@ -68,10 +68,10 @@ public class TaskEdit extends Activity {
 
 		mRowId = (savedInstanceState == null) ? null
 				: (Long) savedInstanceState
-						.getSerializable(NotesDbAdapter.KEY_ROWID);
+						.getSerializable(TasksDbAdapter.KEY_ROWID);
 		if (mRowId == null) {
 			Bundle extras = getIntent().getExtras();
-			mRowId = extras != null ? extras.getLong(NotesDbAdapter.KEY_ROWID)
+			mRowId = extras != null ? extras.getLong(TasksDbAdapter.KEY_ROWID)
 					: null;
 		}
 
@@ -123,13 +123,13 @@ public class TaskEdit extends Activity {
 			Cursor note = mDbHelper.fetchNote(mRowId);
 			startManagingCursor(note);
 			mTitleText.setText(note.getString(note
-					.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE)));
+					.getColumnIndexOrThrow(TasksDbAdapter.KEY_TITLE)));
 			mBodyText.setText(note.getString(note
-					.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY)));
+					.getColumnIndexOrThrow(TasksDbAdapter.KEY_BODY)));
 			mDate = note.getInt(note
-					.getColumnIndexOrThrow(NotesDbAdapter.KEY_DATE_INTEGER));
+					.getColumnIndexOrThrow(TasksDbAdapter.KEY_DATE_INTEGER));
 			mDateDisplay.setText(note.getString(note
-					.getColumnIndexOrThrow(NotesDbAdapter.KEY_DATE)));
+					.getColumnIndexOrThrow(TasksDbAdapter.KEY_DATE)));
 		}
 	}
 
@@ -178,7 +178,7 @@ public class TaskEdit extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		saveState();
-		outState.putSerializable(NotesDbAdapter.KEY_ROWID, mRowId);
+		outState.putSerializable(TasksDbAdapter.KEY_ROWID, mRowId);
 	}
 
 	@Override
