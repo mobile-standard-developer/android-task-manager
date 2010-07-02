@@ -16,19 +16,23 @@
 
 package android.jpsan.es;
 
+import java.util.Calendar;
 import java.util.Date;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.database.Cursor;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class NoteEdit extends Activity {
+public class TaskEdit extends Activity {
 
 	private TextView mDateDisplay;
 
@@ -42,6 +46,8 @@ public class NoteEdit extends Activity {
 	private int mYear = d.getYear();
 	private int mMonth = d.getMonth();
 	private int mDay = d.getDay();
+	
+	
 
 	private NotesDbAdapter mDbHelper;
 
@@ -51,14 +57,14 @@ public class NoteEdit extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mDbHelper = new NotesDbAdapter(this);
-
+		
 		mDbHelper.open();
 		setContentView(R.layout.note_edit);
 
 		mTitleText = (EditText) findViewById(R.id.title);
 		mBodyText = (EditText) findViewById(R.id.body);
 		mDateDisplay = (TextView) findViewById(R.id.selectedDate);
-
+		
 		// mDate =
 		// Integer.parseInt(((EditText)findViewById(R.id.text2)).getText().toString());
 
@@ -111,8 +117,11 @@ public class NoteEdit extends Activity {
 		switch (id) {
 		case DATE_DIALOG_ID:
 
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+			DatePickerDialog dp = new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
 					mDay);
+			dp.updateDate(2010, d.getMonth(), d.getDay());
+			
+			return dp;
 		}
 		return null;
 	}
@@ -140,16 +149,25 @@ public class NoteEdit extends Activity {
 				.append(mYear).append(" "));
 
 		String formDate = mYear + "";
+		String temp = "";
 		if (mMonth + 1 <= 9) {
 			formDate = formDate + "0";
+			
 		}
 		formDate = formDate + (mMonth + 1);
+		
 		if (mDay <= 9) {
 			formDate = formDate + "0";
+			
 		}
+		
 		formDate = formDate + mDay;
-
+		
+		temp = formDate.substring(6)+"/"+formDate.substring(4,6)+"/"+formDate.substring(0,4);
+		
+		mDateDisplay.setText(temp);
 		mDate = Integer.parseInt(formDate);
+		
 	}
 
 	// the callback received when the user "sets" the date in the dialog
@@ -202,14 +220,13 @@ public class NoteEdit extends Activity {
 
 	}
 
+
 	private boolean notInvalidDataParsed(String title, String body, String date) {
 
 		if (title == null || title.equals("") || title.startsWith(" ")) {
 			return false;
 		}
-		if (body == null || body.equals("")) {
-			return false;
-		}
+		
 		if (date == null || date.equals("") || date.startsWith(" ")) {
 			return false;
 		}

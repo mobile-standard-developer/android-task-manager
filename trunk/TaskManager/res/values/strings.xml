@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Task Manager</string>
-    <string name="no_notes">No Notes Yet</string>
+    <string name="no_notes">** No Tasks Yet **</string>
     <string name="menu_insert">Add Note</string>
+    <string name="menu_sort_date">Sort by Date</string>
+    <string name="menu_sort_title">Sort by Title</string>
     <string name="menu_delete">Delete Note</string>
     <string name="menu_done">Mark as Done</string>
     <string name="menu_undone">Mark as Undone</string>

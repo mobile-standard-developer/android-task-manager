@@ -34,7 +34,7 @@ import android.util.Log;
  * of using a collection of inner classes (which is less scalable and not
  * recommended).
  */
- public class  NotesDbAdapter {
+public class NotesDbAdapter {
 
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_BODY = "body";
@@ -56,9 +56,9 @@ import android.util.Log;
 	 * Database creation sql statement
 	 */
 	private static final String DATABASE_CREATE = "create table notes (_id integer primary key autoincrement, "
-			+ "title text not null, body text not null, date_i integer, date text not null );";
+			+ "title text not null, body text not null, date text not null, date_i integer );";
 
-	private static final String DATABASE_NAME = "data1";
+	private static final String DATABASE_NAME = "data";
 	private static final String DATABASE_TABLE = "notes";
 	private static final int DATABASE_VERSION = 2;
 
@@ -133,9 +133,9 @@ import android.util.Log;
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TITLE, title);
 		initialValues.put(KEY_BODY, body);
-		initialValues.put(KEY_DATE_INTEGER, date_i);
 		initialValues.put(KEY_DATE, date);
-
+		initialValues.put(KEY_DATE_INTEGER, date_i);
+		
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 	}
 
@@ -185,8 +185,8 @@ import android.util.Log;
 		}
 
 		return mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_TITLE,
-				KEY_BODY, KEY_DATE_INTEGER, KEY_DATE }, null, null, null, null,
-				null);
+				KEY_BODY, KEY_DATE, KEY_DATE_INTEGER}, null, null, null, null,
+				by_order);
 
 	}
 
@@ -204,8 +204,8 @@ import android.util.Log;
 		Cursor mCursor =
 
 		mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_TITLE,
-				KEY_BODY, KEY_DATE_INTEGER ,KEY_DATE }, KEY_ROWID + "=" + rowId, null, null,
-				null, null, null);
+				KEY_BODY, KEY_DATE, KEY_DATE_INTEGER },
+				KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
@@ -226,12 +226,14 @@ import android.util.Log;
 	 *            value to set note body to
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateNote(long rowId, String title, String body, int date_i,String date) {
+	public boolean updateNote(long rowId, String title, String body,
+			int date_i, String date) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_TITLE, title);
 		args.put(KEY_BODY, body);
 		args.put(KEY_DATE, date);
 		args.put(KEY_DATE_INTEGER, date_i);
+		
 
 		return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
