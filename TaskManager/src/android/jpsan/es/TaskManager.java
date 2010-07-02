@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -34,50 +35,63 @@ public class TaskManager extends ListActivity {
 	private static final int ACTIVITY_EDIT = 1;
 	
 	private static final int INSERT_ID = Menu.FIRST;
+	private static final int SORT_DATE_ID = Menu.FIRST+4;
+	private static final int SORT_TITLE_ID = Menu.FIRST+5;
+	
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	private static final int DONE_ID = Menu.FIRST + 2;
 	private static final int UNDONE_ID = Menu.FIRST + 3;
+	
 
 	private NotesDbAdapter mDbHelper;
+	
+	private int actualSortKey;
+	private int actualSortOrder;
+	
 
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notes_list);
 		mDbHelper = new NotesDbAdapter(this);
 		mDbHelper.open();
+		actualSortKey = NotesDbAdapter.BY_TITLE;
+		actualSortOrder = NotesDbAdapter.ASC_ORDER;
 		fillData();
 		registerForContextMenu(getListView());
 	}
 
 	private void fillData() {
-		Cursor notesCursor = mDbHelper.fetchAllNotes(NotesDbAdapter.BY_TITLE,
-				NotesDbAdapter.DESC_ORDER);
+		Cursor notesCursor = mDbHelper.fetchAllNotes(actualSortKey,
+				actualSortOrder);
 		// Get all of the rows from the database and create the item list
-		notesCursor = mDbHelper.fetchAllNotes(NotesDbAdapter.BY_TITLE,
-				NotesDbAdapter.DESC_ORDER);
+		notesCursor = mDbHelper.fetchAllNotes(actualSortKey,
+				actualSortOrder);
 		startManagingCursor(notesCursor);
 
 		// Create an array to specify the fields we want to display in the list
 		// (only TITLE)
-		String[] from = new String[] { NotesDbAdapter.KEY_TITLE,
+		String[] from = new String[] {NotesDbAdapter.KEY_TITLE,
 				NotesDbAdapter.KEY_DATE };
 
 		// and an array of the fields we want to bind those fields to (in this
 		// case just text1)
-		int[] to = new int[] { R.id.text1, R.id.text2 };
+		int[] to = new int[] {R.id.text1, R.id.text2 };
 
 		// Now create a simple cursor adapter and set it to display
 		SimpleCursorAdapter notes = new SimpleCursorAdapter(this,
 				R.layout.notes_row, notesCursor, from, to);
 		setListAdapter(notes);
+		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, INSERT_ID, 0, R.string.menu_insert);
+		menu.add(0, SORT_TITLE_ID,0, R.string.menu_sort_title);
+		menu.add(0, SORT_DATE_ID,0, R.string.menu_sort_date);
 		return true;
 	}
 
@@ -86,6 +100,16 @@ public class TaskManager extends ListActivity {
 		switch (item.getItemId()) {
 		case INSERT_ID:
 			createNote();
+			return true;
+		case SORT_TITLE_ID:
+			this.actualSortKey = NotesDbAdapter.BY_TITLE;
+			this.actualSortOrder = NotesDbAdapter.ASC_ORDER;
+			fillData();
+			return true;
+		case SORT_DATE_ID:
+			this.actualSortKey = NotesDbAdapter.BY_DATE;
+			this.actualSortOrder = NotesDbAdapter.DESC_ORDER;
+			fillData();
 			return true;
 		}
 
@@ -124,15 +148,20 @@ public class TaskManager extends ListActivity {
 	}
 
 	private void createNote() {
-		Intent i = new Intent(this, NoteEdit.class);
+		Intent i = new Intent(this, TaskEdit.class);
 		startActivityForResult(i, ACTIVITY_CREATE);
+	}
+	
+	private void getFromServer(){
+		Intent i = new Intent (this, TaskEdit.class);
+		startActivityForResult(i,ACTIVITY_EDIT);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
 		super.onListItemClick(l, v, position, id);
-		Intent i = new Intent(this, NoteEdit.class);
+		Intent i = new Intent(this, TaskEdit.class);
 		i.putExtra(NotesDbAdapter.KEY_ROWID, id);
 		startActivityForResult(i, ACTIVITY_EDIT);
 
